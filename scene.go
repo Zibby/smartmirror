@@ -28,7 +28,7 @@ func (s *scene) run(events <-chan sdl.Event, r *sdl.Renderer) <-chan error {
 	errc := make(chan error)
 	go func() {
 		defer close(errc)
-		tick := time.Tick(1 * time.Millisecond)
+		tick := time.Tick(1000 * time.Millisecond)
 		for {
 			select {
 			case e := <-events:
