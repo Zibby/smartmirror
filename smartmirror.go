@@ -40,7 +40,7 @@ func run() error {
 	if err := scene.paint(r); err != nil {
 		return fmt.Errorf("could not paint scene: %v", err)
 	}
-	//time.Sleep(2 * time.Second)
+	defer scene.destroy()
 
 	events := make(chan sdl.Event)
 	errc := scene.run(events, r)
@@ -52,7 +52,4 @@ func run() error {
 			return err
 		}
 	}
-
-	defer scene.destroy()
-	return nil
 }
