@@ -16,6 +16,11 @@ func main() {
 	}
 }
 
+const (
+	windowheight = 1080
+	windowwidth  = 1920
+)
+
 func run() error {
 	err := sdl.Init(sdl.INIT_EVERYTHING)
 	if err != nil {
@@ -26,13 +31,16 @@ func run() error {
 	if err := ttf.Init(); err != nil {
 		return fmt.Errorf("could not init TTF: %v", err)
 	}
-
-	w, r, err := sdl.CreateWindowAndRenderer(1920, 1080, sdl.WINDOW_FULLSCREEN_DESKTOP)
+	w, err := sdl.CreateWindow("", 0, 0, windowwidth, windowheight, sdl.WINDOW_FULLSCREEN_DESKTOP)
 	if err != nil {
 		return fmt.Errorf("could not draw window %v", err)
 	}
+	r, err := sdl.CreateRenderer(w, -1, sdl.RENDERER_ACCELERATED)
+	if err != nil {
+		return fmt.Errorf("could not create rendorer %v", err)
+	}
 	defer w.Destroy()
-
+	r.SetDrawColor(0, 0, 0, 255)
 	scene, err := newScene(r)
 	if err != nil {
 		return fmt.Errorf("could not newScene: %v", err)
@@ -40,6 +48,7 @@ func run() error {
 	if err := scene.paint(r); err != nil {
 		return fmt.Errorf("could not paint scene: %v", err)
 	}
+
 	defer scene.destroy()
 
 	events := make(chan sdl.Event)

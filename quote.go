@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -37,6 +38,15 @@ func newQuote() (string, error) {
 	defer resp.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
+	replacer := strings.NewReplacer(
+		"<p>", "",
+		"<\\/p>", "",
+		"<b>", "",
+		"</b>", "",
+		"\\n", "",
+		"&#8217;", "")
+	bodyString = replacer.Replace(bodyString)
+	bodyString = strings.Trim(bodyString, "")
 	return bodyString, err
 }
 
@@ -62,7 +72,7 @@ func todaysQuote() (string, string, error) {
 
 func newQuoteBlock(r *sdl.Renderer) (*quoteBlock, error) {
 	quotecolor := sdl.Color{R: 255, G: 255, B: 255, A: 255}
-	quotefont, err := ttf.OpenFont("fonts/LemonMilk.ttf", 250)
+	quotefont, err := ttf.OpenFont("fonts/LemonMilk.ttf", 50)
 	if err != nil {
 		return nil, fmt.Errorf("could not open quote font %v", err)
 	}
@@ -71,7 +81,10 @@ func newQuoteBlock(r *sdl.Renderer) (*quoteBlock, error) {
 		font:  quotefont,
 		color: quotecolor,
 		auth:  auth,
-		x:     100, y: 900, h: 100, w: 1000}, nil
+		x:     0,
+		y:     windowheight,
+		h:     90,
+		w:     windowwidth - 100}, nil
 }
 
 func (quoteBlock *quoteBlock) paintQuote(r *sdl.Renderer) error {

@@ -42,6 +42,10 @@ func (s *scene) run(events <-chan sdl.Event, r *sdl.Renderer) <-chan error {
 				if err := s.paint(r); err != nil {
 					errc <- err
 				}
+
+				s.paint(r)
+				sdl.Delay(2)
+				r.Present()
 			}
 		}
 	}()
@@ -59,6 +63,10 @@ func (s *scene) handleEvent(event sdl.Event) bool {
 
 func (s *scene) paint(r *sdl.Renderer) error {
 	r.Clear()
+
+	//bgcolor := sdl.Color{R: 0, G: 0, B: 0, A: 255}
+	//bg := &sdl.Rect{X: 0, Y: 0, W: windowwidth, H: windowheight}
+
 	clock, err := newClock(r)
 	s.clock = clock
 	if err != nil {
@@ -96,7 +104,7 @@ func (s *scene) paint(r *sdl.Renderer) error {
 	if err := s.quote.paintQuote(r); err != nil {
 		return err
 	}
-	r.Present()
+	//r.Present()
 	return nil
 }
 

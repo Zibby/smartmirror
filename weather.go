@@ -46,7 +46,7 @@ func todaysWeather() (string, error) {
 
 func newWeather(r *sdl.Renderer) (*weather, error) {
 	weathercolor := sdl.Color{R: 255, G: 255, B: 255, A: 255}
-	weatherfont, err := ttf.OpenFont("fonts/LemonMilk.ttf", 250)
+	weatherfont, err := ttf.OpenFont("fonts/LemonMilk.ttf", 200)
 	if err != nil {
 		return nil, fmt.Errorf("could not open weather font %v", err)
 	}
@@ -54,7 +54,10 @@ func newWeather(r *sdl.Renderer) (*weather, error) {
 	return &weather{todaysWeather: todaysWeather,
 		font:  weatherfont,
 		color: weathercolor,
-		x:     1700, y: 0, h: 100, w: 200}, nil
+		x:     windowwidth - 400,
+		y:     0,
+		h:     200,
+		w:     400}, nil
 }
 
 type weather struct {
